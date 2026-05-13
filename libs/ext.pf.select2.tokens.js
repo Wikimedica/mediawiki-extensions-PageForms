@@ -326,9 +326,12 @@ const Sortable = require( 'ext.pageforms.sortable' );
 				data = wgPageFormsAutocompleteValues[autocompletesettings];
 				//Convert data into the format accepted by Select2
 				if ( data !== undefined && data !== null ) {
+					const arrayType = Array.isArray(data) ? 'indexed' : 'associative';
 					for (const key in data) {
+						const optionVal = (arrayType === 'indexed') ? data[key] : key;
+						const optionLabel = data[key];
 						values.push({
-							id: data[key], text: data[key]
+							id: optionVal, text: optionLabel
 						});
 					}
 				}
