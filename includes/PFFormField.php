@@ -392,7 +392,7 @@ class PFFormField {
 		}
 		// end for
 
-		if ( in_array( $valuesSourceType, [ 'category', 'namespace', 'concept' ] ) ) {
+		if ( in_array( $valuesSourceType, [ 'category', 'namespace', 'concept', 'property', 'query' ] ) ) {
 			global $wgPageFormsUseDisplayTitle;
 			$f->mUseDisplayTitle = $wgPageFormsUseDisplayTitle;
 		} else {
