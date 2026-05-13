@@ -394,6 +394,7 @@ const Sortable = require( 'ext.pageforms.sortable' );
 		const ajaxOpts = {
 			url: my_server,
 			dataType: 'json',
+			delay: 500,
 			data: function (term) {
 				$( '#loading-' + input_id ).show();
 				const reqParams = { substr: term.term }; // search term
