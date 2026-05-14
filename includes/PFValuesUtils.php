@@ -539,6 +539,17 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language \"" . $wgLanguageCode
 				return "page_namespace = $ns";
 			}, $queriedNamespaces );
 			$namespaceNames = [];
+		} elseif ( $namespaceStr === '*' ) {
+			// Every namespace registered on the wiki (built-in + extensions),
+			// excluding virtual/negative namespaces (Special, Media).
+			$queriedNamespaces = array_values( array_filter(
+				MediaWikiServices::getInstance()->getNamespaceInfo()->getValidNamespaces(),
+				static fn ( $ns ) => $ns >= 0
+			) );
+			$namespaceConditions = array_map( static function ( $ns ) {
+				return "page_namespace = $ns";
+			}, $queriedNamespaces );
+			$namespaceNames = [];
 		} else {
 			$namespaceNames = explode( ',', $namespaceStr );
 			$queriedNamespaces = [];
