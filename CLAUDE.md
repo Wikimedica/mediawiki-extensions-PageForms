@@ -15,7 +15,7 @@ retired and `.gitmodules` switched back to `wikimedia/...` on `master`.**
 - `upstream` — `wikimedia/mediawiki-extensions-PageForms` (the canonical
   GitHub mirror of Wikimedia's Gerrit)
 
-## The five patches on `wikimedica-deploy`
+## The six patches on `wikimedica-deploy`
 
 Ordered as commits, oldest first. Each is independent and touches non-
 overlapping hunks.
@@ -27,6 +27,7 @@ overlapping hunks.
 | `Tokens: fix local-autocomplete option value vs label mapping` | `ext.pf.select2.tokens.js` | Completes T421922; not yet submitted |
 | `Tokens: debounce AJAX 500ms for dead-key composition` | `ext.pf.select2.tokens.js` | Not yet submitted upstream |
 | `Route property/query/remote-autocompletion fields through remote mode` | `PFFormField.php`, `PFValuesUtils.php` | Not yet submitted upstream |
+| `Support 'values from namespace=*' for every namespace on the wiki` | `PFValuesUtils.php` | Not yet submitted upstream |
 
 See `git log master..wikimedica-deploy` for full commit messages.
 
@@ -58,6 +59,17 @@ See `git log master..wikimedica-deploy` for full commit messages.
    and makes `semantic_query` and the user-facing `remote autocompletion`
    flag actually force remote-AJAX mode in
    `getRemoteDataTypeAndPossiblySetAutocompleteValues`.
+
+6. **`values from namespace=*`** — adds a new special-token handling in
+   `getAllPagesForNamespace`, mirroring the existing `_contentNamespaces`
+   case but expanding to `NamespaceInfo::getValidNamespaces()` (all real
+   namespaces, including extension-defined ones). Avoids the brittle
+   pattern of enumerating every namespace by name in a field
+   declaration, and the side-effects of adding namespaces to
+   `$wgContentNamespaces` just to expose them for autocompletion.
+   Replaces the earlier `values from url=allpages` workaround which
+   relied on a custom server-to-server HTTP loopback that Cloudflare
+   blocks on production.
 
 ## Upstream submission plan
 
