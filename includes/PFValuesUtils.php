@@ -619,7 +619,14 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language \"" . $wgLanguageCode
 		$conditions[] = implode( ' OR ', $namespaceConditions );
 		$tables = [ 'page' ];
 		$columns = [ 'page_title' ];
-		if ( count( $namespaceConditions ) > 1 ) {
+		// When more than one namespace is queried, we need page_namespace so
+		// results can be rendered with their namespace prefix. The same flag
+		// that keeps namespaces in mapping-property fallback labels also
+		// keeps them in autocomplete dropdown labels — so set-to-false wikis
+		// always see "Gestion:Foo" rather than just "Foo".
+		global $wgPageFormsStripNamespaceFromMappingPropertyLabel;
+		$keepNamespacePrefix = !( $wgPageFormsStripNamespaceFromMappingPropertyLabel ?? true );
+		if ( count( $namespaceConditions ) > 1 || $keepNamespacePrefix ) {
 			$columns[] = 'page_namespace';
 		}
 		if ( $wgPageFormsUseDisplayTitle ) {

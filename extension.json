@@ -713,6 +713,7 @@
 		"PageFormsDefaultDateFormat": "YYYY-MM-DD;YYYY-MM;YYYY",
 		"PageFormsVisualEditorMaxHeight": 400,
 		"PageFormsUseDisplayTitle": true,
+		"PageFormsStripNamespaceFromMappingPropertyLabel": true,
 		"PageFormsShowExpandAllLink": false,
 		"PageFormsSimpleUpload": false,
 		"PageFormsMaxAutocompleteValues": 1000,
