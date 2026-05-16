@@ -15,7 +15,7 @@ retired and `.gitmodules` switched back to `wikimedia/...` on `master`.**
 - `upstream` — `wikimedia/mediawiki-extensions-PageForms` (the canonical
   GitHub mirror of Wikimedia's Gerrit)
 
-## The seven patches on `wikimedica-deploy`
+## The eight patches on `wikimedica-deploy`
 
 Ordered as commits, oldest first. Each is independent and touches non-
 overlapping hunks.
@@ -29,6 +29,7 @@ overlapping hunks.
 | `Route property/query/remote-autocompletion fields through remote mode` | `PFFormField.php`, `PFValuesUtils.php` | Not yet submitted upstream |
 | `Support 'values from namespace=*' for every namespace on the wiki` | `PFValuesUtils.php` | Not yet submitted upstream |
 | `Make mapping-property namespace stripping configurable` | `PFMappingUtils.php` | Not yet submitted upstream |
+| `Autocomplete by page_title even when displaytitle is set` | `PFValuesUtils.php` | Not yet submitted upstream |
 
 See `git log master..wikimedica-deploy` for full commit messages.
 
@@ -81,6 +82,15 @@ See `git log master..wikimedica-deploy` for full commit messages.
    `true` so existing wikis see no behavior change. Set to `false` on
    Wikimedica's `LocalSettings.php` to keep the full canonical title in
    the tokens dropdown when no `Display title of` is set.
+
+8. **Search `page_title` even when `displaytitle` is set** —
+   `getAllPagesForCategory` and `getAllPagesForNamespace` previously
+   gated the `page_title` substring match behind
+   `pp_displaytitle.pp_value IS NULL`, so a page with a
+   `{{DISPLAYTITLE:...}}` could no longer be found by typing its
+   canonical title — only by typing substrings of the display title.
+   Drop the gate so both columns are always searched. Dropdown labels
+   and saved values are unchanged; only the SQL `WHERE` clause widens.
 
 ## Upstream submission plan
 
