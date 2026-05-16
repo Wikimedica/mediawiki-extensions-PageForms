@@ -147,9 +147,16 @@ class PFMappingUtils {
 				if ( count( $vals ) > 0 ) {
 					$res[$value] = trim( $vals[0] );
 				} else {
-					// @todo - make this optional
-					$label = self::removeNSPrefixFromLabel( trim( $value ) );
-					$res[$value] = $label;
+					// When the mapping property has no value for this page,
+					// fall back to the value itself. Stripping the namespace
+					// prefix from that fallback is controlled by
+					// $wgPageFormsStripNamespaceFromMappingPropertyLabel
+					// (default true, preserving previous behavior).
+					global $wgPageFormsStripNamespaceFromMappingPropertyLabel;
+					$strip = $wgPageFormsStripNamespaceFromMappingPropertyLabel ?? true;
+					$res[$value] = $strip
+						? self::removeNSPrefixFromLabel( trim( $value ) )
+						: $value;
 				}
 			} else {
 				$res[$value] = $value;
