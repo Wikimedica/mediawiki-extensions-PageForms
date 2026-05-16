@@ -15,7 +15,7 @@ retired and `.gitmodules` switched back to `wikimedia/...` on `master`.**
 - `upstream` — `wikimedia/mediawiki-extensions-PageForms` (the canonical
   GitHub mirror of Wikimedia's Gerrit)
 
-## The eight patches on `wikimedica-deploy`
+## The nine patches on `wikimedica-deploy`
 
 Ordered as commits, oldest first. Each is independent and touches non-
 overlapping hunks.
@@ -30,6 +30,7 @@ overlapping hunks.
 | `Support 'values from namespace=*' for every namespace on the wiki` | `PFValuesUtils.php` | Not yet submitted upstream |
 | `Make mapping-property namespace stripping configurable` | `PFMappingUtils.php` | Not yet submitted upstream |
 | `Autocomplete by page_title even when displaytitle is set` | `PFValuesUtils.php` | Not yet submitted upstream |
+| `Parse namespace prefix from autocomplete search substring` | `PFValuesUtils.php` | Not yet submitted upstream |
 
 See `git log master..wikimedica-deploy` for full commit messages.
 
@@ -91,6 +92,15 @@ See `git log master..wikimedica-deploy` for full commit messages.
    canonical title — only by typing substrings of the display title.
    Drop the gate so both columns are always searched. Dropdown labels
    and saved values are unchanged; only the SQL `WHERE` clause widens.
+
+9. **Parse namespace prefix from autocomplete search substring** —
+   `page_title` doesn't include the namespace prefix, so typing
+   `Gestion:Mark` never matched `Gestion:Marketing`. Detect the case
+   where the search substring parses to a non-main namespace
+   (`Title::newFromText`), scope the SQL filter to that single
+   namespace, and strip the prefix from the substring before the LIKE
+   match. Aliases (`Wikimedica:Foo`) and case folding (`gestion:foo`)
+   are handled by `Title::newFromText`.
 
 ## Upstream submission plan
 
