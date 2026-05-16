@@ -15,7 +15,7 @@ retired and `.gitmodules` switched back to `wikimedia/...` on `master`.**
 - `upstream` — `wikimedia/mediawiki-extensions-PageForms` (the canonical
   GitHub mirror of Wikimedia's Gerrit)
 
-## The six patches on `wikimedica-deploy`
+## The seven patches on `wikimedica-deploy`
 
 Ordered as commits, oldest first. Each is independent and touches non-
 overlapping hunks.
@@ -28,6 +28,7 @@ overlapping hunks.
 | `Tokens: debounce AJAX 500ms for dead-key composition` | `ext.pf.select2.tokens.js` | Not yet submitted upstream |
 | `Route property/query/remote-autocompletion fields through remote mode` | `PFFormField.php`, `PFValuesUtils.php` | Not yet submitted upstream |
 | `Support 'values from namespace=*' for every namespace on the wiki` | `PFValuesUtils.php` | Not yet submitted upstream |
+| `Make mapping-property namespace stripping configurable` | `PFMappingUtils.php` | Not yet submitted upstream |
 
 See `git log master..wikimedica-deploy` for full commit messages.
 
@@ -70,6 +71,16 @@ See `git log master..wikimedica-deploy` for full commit messages.
    Replaces the earlier `values from url=allpages` workaround which
    relied on a custom server-to-server HTTP loopback that Cloudflare
    blocks on production.
+
+7. **Configurable namespace stripping in mapping-property labels** —
+   `PFMappingUtils::getValuesWithMappingProperty` strips the namespace
+   prefix from the fallback label when the mapping property has no
+   value for a page (the upstream code has a `@todo - make this
+   optional` on that line). New global
+   `$wgPageFormsStripNamespaceFromMappingPropertyLabel`, defaulting to
+   `true` so existing wikis see no behavior change. Set to `false` on
+   Wikimedica's `LocalSettings.php` to keep the full canonical title in
+   the tokens dropdown when no `Display title of` is set.
 
 ## Upstream submission plan
 
