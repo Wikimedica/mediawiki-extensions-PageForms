@@ -599,6 +599,21 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language \"" . $wgLanguageCode
 			$namespaceConditions[] = "page_namespace = $matchingNamespaceCode";
 		}
 
+		// If the user typed a namespace prefix in the search term itself
+		// (e.g. "Gestion:Mark"), parse it out: scope the search to that
+		// single namespace and strip the prefix from the substring.
+		if ( $substring !== null && strpos( $substring, ':' ) !== false ) {
+			$parsedTitle = Title::newFromText( $substring );
+			if ( $parsedTitle instanceof Title
+				&& $parsedTitle->getNamespace() !== NS_MAIN
+				&& in_array( $parsedTitle->getNamespace(), $queriedNamespaces, true )
+			) {
+				$queriedNamespaces = [ $parsedTitle->getNamespace() ];
+				$namespaceConditions = [ 'page_namespace = ' . $parsedTitle->getNamespace() ];
+				$substring = str_replace( '_', ' ', $parsedTitle->getDBkey() );
+			}
+		}
+
 		$db = PFUtils::getReadDB();
 		$conditions = [];
 		$conditions[] = implode( ' OR ', $namespaceConditions );
