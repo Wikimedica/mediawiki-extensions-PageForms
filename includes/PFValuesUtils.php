@@ -323,9 +323,9 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language \"" . $wgLanguageCode
 						]
 					];
 					if ( $substring != null ) {
-						$conditions[] = '((pp_displaytitle.pp_value IS NULL OR pp_displaytitle.pp_value = \'\') AND (' .
+						$conditions[] = '(' .
 							self::getSQLConditionForAutocompleteInColumn( 'page_title', $substring ) .
-							')) OR ' .
+							') OR ' .
 							self::getSQLConditionForAutocompleteInColumn( 'pp_displaytitle.pp_value', $substring, false ) .
 							' OR page_namespace = ' . NS_CATEGORY;
 					}
@@ -627,9 +627,9 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language \"" . $wgLanguageCode
 				]
 			];
 			if ( $substring != null ) {
-				$substringCondition = '(pp_displaytitle.pp_value IS NULL AND (' .
+				$substringCondition = '(' .
 					self::getSQLConditionForAutocompleteInColumn( 'page_title', $substring ) .
-					')) OR ' .
+					') OR ' .
 					self::getSQLConditionForAutocompleteInColumn( 'pp_displaytitle.pp_value', $substring, false );
 				if ( !in_array( NS_CATEGORY, $queriedNamespaces ) ) {
 					$substringCondition .= ' OR page_namespace = ' . NS_CATEGORY;
