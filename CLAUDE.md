@@ -15,7 +15,7 @@ retired and `.gitmodules` switched back to `wikimedia/...` on `master`.**
 - `upstream` — `wikimedia/mediawiki-extensions-PageForms` (the canonical
   GitHub mirror of Wikimedia's Gerrit)
 
-## The nine patches on `wikimedica-deploy`
+## The ten patches on `wikimedica-deploy`
 
 Ordered as commits, oldest first. Each is independent and touches non-
 overlapping hunks.
@@ -31,6 +31,7 @@ overlapping hunks.
 | `Make mapping-property namespace stripping configurable` | `PFMappingUtils.php` | Not yet submitted upstream |
 | `Autocomplete by page_title even when displaytitle is set` | `PFValuesUtils.php` | Not yet submitted upstream |
 | `Parse namespace prefix from autocomplete search substring` | `PFValuesUtils.php` | Not yet submitted upstream |
+| `Respect StripNamespace flag in autocomplete dropdown labels too` | `PFValuesUtils.php`, `extension.json` | Not yet submitted upstream |
 
 See `git log master..wikimedica-deploy` for full commit messages.
 
@@ -101,6 +102,18 @@ See `git log master..wikimedica-deploy` for full commit messages.
    namespace, and strip the prefix from the substring before the LIKE
    match. Aliases (`Wikimedica:Foo`) and case folding (`gestion:foo`)
    are handled by `Title::newFromText`.
+
+10. **Respect `StripNamespace` flag in autocomplete dropdown labels** —
+    extends `$wgPageFormsStripNamespaceFromMappingPropertyLabel` to
+    also control whether the `page_namespace` column is selected in
+    `getAllPagesForNamespace`. With the flag set to `false`, the
+    autocomplete dropdown always renders results with their namespace
+    prefix (e.g. `Gestion:Marketing`), not just when more than one
+    namespace happens to be queried. Also fixes a regression from
+    patch #9 where scoping to a single namespace dropped the prefix
+    from labels. The flag is now declared in `extension.json` under
+    the `config` section so it's discoverable like other PageForms
+    settings.
 
 ## Upstream submission plan
 
